@@ -9,6 +9,9 @@
     "lib": "vue-cli-service build --target lib --name alphabet-sort-list --dest lib packages/index.js"
   },
   "dependencies": {
+    "better-scroll": "^1.13.2",
+    "lib-flexible": "^0.3.2",
+    "pinyin": "^2.8.3",
     "vue": "^2.5.17"
   },
   "devDependencies": {
