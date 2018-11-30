@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="list-content">
-        <div class="none-tip" v-if="isEmpty">{{noneTip}}</div>
+        <!-- <div class="none-tip" v-if="isEmpty">{{noneTip}}</div> -->
         <div class="scroll-wrapper" ref="wrapper" v-if="!isEmpty">
             <ul class="content">
                 <li v-for="(item, index) in options">
@@ -9,9 +9,15 @@
                 </li>
             </ul>
         </div>
-        <div class="alphabets">
+        <div class="alphabets" 
+            ref="alphabets"
+            @click.stop="clicKeykHandle"
+            @touchstart.stop="touchstartHandle"
+            @touchmove.stop="touchmoveHandle"
+            @touchend.stop="touchendHandle">
             <div class="item" v-for="(item, index) in alphabets">{{item}}</div>
         </div>
+        <div class="active-key" v-if="showActiveKey">{{activeKey}}</div>
     </div>
 </template>
 
@@ -55,7 +61,20 @@ export default {
     },
     data () {
         return {
-            scroll: null
+            scroll: null,
+            moveY: 0,
+            activeKey: '',
+            showActiveKey: false,
+            activeKeyIndex: 0,
+        }
+    },
+    watch: {
+        activeKeyIndex : {
+            handler (newVal) {
+                this.activeKey = this.alphabets[newVal]
+                this.scroll.scrollToElement(this.$refs.wrapper.getElementsByClassName('key')[newVal])
+            },
+            deep: true
         }
     },
     computed: {
@@ -76,7 +95,7 @@ export default {
             return [...new Set(alphabets)].sort()
         },
 
-        //
+        //列表数据
         options: function () {
             let vm = this,
                 options = [],
@@ -88,7 +107,7 @@ export default {
                 options.push({
                     key: key,
                     value: item[vm.valueKey],
-                    label: item[vm.labelKey]
+                    label: item[vm.labelKey],
                 })
             })
 
@@ -100,17 +119,83 @@ export default {
                 } else {
                     options[i].showKey = true
                 }
+
+                if (i == 1) {
+                    options[i - 1].showKey = true
+                }    
             }
 
             return options
         }
 
     },
-    methods: {},
+    methods: {
+        /**
+         * alphabets click事件处理函数
+         */
+        clicKeykHandle (e) {
+            let vm = this
+            let alphabetsDom = vm.$refs.alphabets
+            vm.moveY = e.clientY - (alphabetsDom.offsetTop - alphabetsDom.clientHeight/2)
+            vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+        },
+
+        /**
+         * alphabets touchstart事件处理函数
+         */
+        touchstartHandle () {
+            this.showActiveKey = true
+        },
+
+        /**
+         * alphabets touchmove事件处理函数
+         */
+        touchmoveHandle (e) {
+            let  vm = this
+            let alphabetsDom = vm.$refs.alphabets
+            
+            vm.moveY = e.touches[0].clientY - (alphabetsDom.offsetTop - alphabetsDom.clientHeight/2)
+            
+            vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+            
+        },
+
+        /**
+         * alphabets touchend事件处理函数
+         */
+        touchendHandle (e) {
+            let vm = this
+            vm.showActiveKey = false
+            vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+            vm.moveY = 0
+        },
+
+        /**
+         * 根据Y轴滑动的位置求出索引
+         */
+        getActiveAlphabetIndex (y) {
+            
+            let vm = this,
+                keyItemHeight = parseFloat(vm.$refs.alphabets.getElementsByClassName('item')[0].clientHeight),
+                index = 0
+            for (let i = 0; i < vm.alphabets.length; i++) {
+                let h1 = i * keyItemHeight
+                let h2 = (i + 1) * keyItemHeight
+                if (i === vm.alphabets.length - 1 || (y >= h1 && y <= h2)) {
+                    index = i
+                    break
+                }
+            }    
+            return index
+        }
+
+
+    },
     mounted () {
         this.$nextTick(() => {
             this.scroll = new BScroll(this.$refs.wrapper, {click: true})
         })
+        
     }
 }
 </script>
@@ -124,16 +209,20 @@ export default {
 }
 .list-content{
     height: 100%;
-    position: relative;
+    //position: relative;
+    overflow: hidden;
     .scroll-wrapper{
         height: 100%;
         overflow: hidden;
     }
     ul{
         li{
-            border-bottom:#DFDFDF solid 1px;
+            border-bottom:#EEE solid 1px;
+            &:last-child{
+                border-bottom: none;
+            }
             .key{
-                background-color: #EEE;
+                background-color: #F8F8F8;
                 line-height: 48px;
                 padding: 0 20px;
                 font-size: 26px;
@@ -158,7 +247,22 @@ export default {
             color: #FFF;
             text-align: center;
             font-size: 26px;
+            line-height: 42px;
         }
+    }
+    .active-key{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 96px;
+        box-shadow: 0 0 15px rgba(10, 224, 207, 0.8);
+        border-radius: 50%;
+        line-height: 96px;
+        text-align: center;
+        background-color: rgb(31, 172, 165);
+        font-size: 36px;
+        color: #FFF;
     }
 }
 </style>

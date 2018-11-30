@@ -20,6 +20,10 @@ export default {
                     label: '北京'
                 },
                 {
+                    value: 10002,
+                    label: '北京'
+                },
+                {
                     value: 10003,
                     label: '上海'
                 },
@@ -57,6 +61,62 @@ export default {
                 },
                 {
                     value: 10003,
+                    label: '苏州'
+                },
+                {
+                    value: 10003,
+                    label: '昆明'
+                },
+                {
+                    value: 10003,
+                    label: '贵阳'
+                },
+                {
+                    value: 10003,
+                    label: '沈阳'
+                },
+                {
+                    value: 10003,
+                    label: '南阳'
+                },
+                {
+                    value: 10003,
+                    label: '南充'
+                },
+                {
+                    value: 10003,
+                    label: '绵阳'
+                },
+                {
+                    value: 10003,
+                    label: '广安'
+                },
+                {
+                    value: 10003,
+                    label: '桂林'
+                },
+                {
+                    value: 10003,
+                    label: '南宁'
+                },
+                {
+                    value: 10003,
+                    label: '北海'
+                },
+                {
+                    value: 10003,
+                    label: '开封'
+                },
+                {
+                    value: 10003,
+                    label: '沈阳'
+                },
+                {
+                    value: 10003,
+                    label: '长春'
+                },
+                {
+                    value: 10003,
                     label: '深圳'
                 }
 
@@ -66,8 +126,11 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+html, body{
+    height: 100%;
+}
 .demo{
-    height: 800px;
+    height: 100%;
 }
 </style>
