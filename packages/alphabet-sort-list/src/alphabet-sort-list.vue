@@ -1,11 +1,11 @@
 <template lang="html">
     <div class="list-content">
-        <!-- <div class="none-tip" v-if="isEmpty">{{noneTip}}</div> -->
+        <div class="none-tip" v-if="isEmpty">{{noneTip}}</div>
         <div class="scroll-wrapper" ref="wrapper" v-if="!isEmpty">
             <ul class="content">
                 <li v-for="(item, index) in options">
-                    <div class="key" v-if="item.showKey">{{item.key}}</div>
-                    <div class="label">{{item.label}}</div>
+                    <div class="key" v-if="item.showKey" ref="keyEl">{{item.key}}</div>
+                    <div class="label" ref="labelEl">{{item.label}}</div>
                 </li>
             </ul>
         </div>
@@ -15,7 +15,7 @@
             @touchstart.stop="touchstartHandle"
             @touchmove.stop="touchmoveHandle"
             @touchend.stop="touchendHandle">
-            <div class="item" v-for="(item, index) in alphabets">{{item}}</div>
+            <div class="item" v-for="(item, index) in alphabets" :class="{active: index == activeKeyIndex}">{{item}}</div>
         </div>
         <div class="active-key" v-if="showActiveKey">{{activeKey}}</div>
     </div>
@@ -66,6 +66,9 @@ export default {
             activeKey: '',
             showActiveKey: false,
             activeKeyIndex: 0,
+            itemH: 0,
+            alphabetH: 0,
+            groupHeights: []
         }
     },
     watch: {
@@ -193,7 +196,47 @@ export default {
     },
     mounted () {
         this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.wrapper, {click: true})
+            this.scroll = new BScroll(
+                this.$refs.wrapper,
+                {
+                    click: true,
+                    probeType: 3
+                }
+            )
+            this.itemH = this.$refs.labelEl[0].clientHeight
+            this.alphabetH = this.$refs.keyEl[0].clientHeight
+
+            let num = 1
+            for (let i = 0; i < this.options.length - 1; i++) {
+                const currEle = this.options[i]
+                const nextEle = this.options[i+1]
+                
+                if (currEle.key !== nextEle.key) {
+                    this.groupHeights.push( (i+1)*this.itemH + num*this.alphabetH)
+                    num++
+                } 
+            }
+  
+            this.scroll.on('scroll', (pos) => {
+                const y = pos.y
+                if (y > 0) {
+                    this.activeKeyIndex = 0
+                    return
+                }
+
+                for (let i = 0; i < this.groupHeights.length - 1; i++) {
+                    let h1 = this.groupHeights[i]
+                    let h2 = this.groupHeights[i+1]
+                    
+                    if (-y >= h1 && -y < h2) {                        
+                        this.activeKeyIndex = i+1
+                        return
+                    }
+                }
+
+               
+                
+            })
         })
         
     }
@@ -209,7 +252,7 @@ export default {
 }
 .list-content{
     height: 100%;
-    //position: relative;
+    position: relative;
     overflow: hidden;
     .scroll-wrapper{
         height: 100%;
@@ -248,6 +291,9 @@ export default {
             text-align: center;
             font-size: 26px;
             line-height: 42px;
+            &.active{
+                color: rgba(10, 224, 207, 1);
+            }
         }
     }
     .active-key{
@@ -256,7 +302,7 @@ export default {
         top: 50%;
         transform: translate(-50%, -50%);
         width: 96px;
-        box-shadow: 0 0 15px rgba(10, 224, 207, 0.8);
+        box-shadow: 0 0 15px rgba(10, 224, 207, 1);
         border-radius: 50%;
         line-height: 96px;
         text-align: center;

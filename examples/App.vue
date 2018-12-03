@@ -20,10 +20,6 @@ export default {
                     label: '北京'
                 },
                 {
-                    value: 10002,
-                    label: '北京'
-                },
-                {
                     value: 10003,
                     label: '上海'
                 },
@@ -46,6 +42,114 @@ export default {
                 {
                     value: 10003,
                     label: '天津'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
+                },
+                {
+                    value: 10003,
+                    label: '郑州'
                 },
                 {
                     value: 10003,
