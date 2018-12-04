@@ -1,13 +1,16 @@
 <template lang="html">
     <div class="list-content">
-        <div class="none-tip" v-if="isEmpty">{{noneTip}}</div>
         <div class="scroll-wrapper" ref="wrapper" v-if="!isEmpty">
-            <ul class="content">
-                <li v-for="(item, index) in options">
-                    <div class="key" v-if="item.showKey" ref="keyEl">{{item.key}}</div>
-                    <div class="label" ref="labelEl">{{item.label}}</div>
-                </li>
-            </ul>
+            <div class="content">
+                <ul class="groups" ref="groups">
+                    <li v-for="(group, index) in list" ref="listGroup">
+                        <h2>{{group.name}}</h2>
+                        <ul class="list">
+                            <li class="list-item" v-for="(item, idx) in group.list" @click="clicItemkHandle(item)">{{item[labelKey]}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="alphabets" 
             ref="alphabets"
@@ -22,28 +25,10 @@
 </template>
 
 <script>
-import pinyin from 'pinyin'
 import BScroll from 'better-scroll'
-function compareBykey (key) {
-    return function (a, b) {
-        const aVal = a[key]
-        const bVal = b[key]
-        if (aVal > bVal) {
-            return 1
-        } else if (aVal < bVal) {
-            return -1
-        } else {
-            return 0
-        }
-    }
-}
 export default {
     name: 'alphabetSortList',
     props: {
-        noneTip: {
-            type: String,
-            default: '-- 列表为空 --'
-        },
         list: {
             type: Array,
             default: () => {
@@ -63,7 +48,6 @@ export default {
         return {
             scroll: null,
             moveY: 0,
-            activeKey: '',
             showActiveKey: false,
             activeKeyIndex: 0,
             itemH: 0,
@@ -72,13 +56,7 @@ export default {
         }
     },
     watch: {
-        activeKeyIndex : {
-            handler (newVal) {
-                this.activeKey = this.alphabets[newVal]
-                this.scroll.scrollToElement(this.$refs.wrapper.getElementsByClassName('key')[newVal])
-            },
-            deep: true
-        }
+
     },
     computed: {
         //列表是否空
@@ -91,44 +69,12 @@ export default {
             let vm = this,
                 alphabets = []
 
-            vm.list.forEach(item => {
-                alphabets.push(pinyin(item[vm.labelKey], {heteronym: true, style: pinyin.STYLE_NORMAL})[0][0].charAt(0).toUpperCase())
-            })   
-
-            return [...new Set(alphabets)].sort()
-        },
-
-        //列表数据
-        options: function () {
-            let vm = this,
-                options = [],
-                prevKey = ''
-
-            vm.list.forEach(item => {
-                let key = pinyin(item[vm.labelKey], {heteronym: true, style: pinyin.STYLE_NORMAL})[0][0].charAt(0).toUpperCase()
-
-                options.push({
-                    key: key,
-                    value: item[vm.valueKey],
-                    label: item[vm.labelKey],
-                })
+            return vm.list.map((item) => {
+                return item.name.substr(0, 1)
             })
-
-            options.sort(compareBykey('key'))
-
-            for (let i = options.length - 1; i >= 1; i--) {
-                if (options[i].key === options[i - 1].key) {
-                    options[i].showKey = false
-                } else {
-                    options[i].showKey = true
-                }
-
-                if (i == 1) {
-                    options[i - 1].showKey = true
-                }    
-            }
-
-            return options
+        },
+        activeKey: function () {
+            return this.alphabets[this.activeKeyIndex]
         }
 
     },
@@ -141,6 +87,7 @@ export default {
             let alphabetsDom = vm.$refs.alphabets
             vm.moveY = e.clientY - (alphabetsDom.offsetTop - alphabetsDom.clientHeight/2)
             vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+             vm.scroll.scrollToElement(vm.$refs.groups.getElementsByTagName('h2')[vm.activeKeyIndex])
         },
 
         /**
@@ -158,8 +105,8 @@ export default {
             let alphabetsDom = vm.$refs.alphabets
             
             vm.moveY = e.touches[0].clientY - (alphabetsDom.offsetTop - alphabetsDom.clientHeight/2)
-            
             vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+            vm.scroll.scrollToElement(vm.$refs.groups.getElementsByTagName('h2')[vm.activeKeyIndex])
             
         },
 
@@ -170,6 +117,7 @@ export default {
             let vm = this
             vm.showActiveKey = false
             vm.activeKeyIndex = vm.getActiveAlphabetIndex(vm.moveY)
+            vm.scroll.scrollToElement(vm.$refs.groups.getElementsByTagName('h2')[vm.activeKeyIndex])
             vm.moveY = 0
         },
 
@@ -190,53 +138,60 @@ export default {
                 }
             }    
             return index
-        }
+        },
 
+        /**
+         * 点击列表时间处理函数
+         */
+        clicItemkHandle (itemObj) {
+            let obj = Object.assign({}, itemObj)
+            this.$emit('itemClick', obj)
+        }
 
     },
     mounted () {
         this.$nextTick(() => {
-            this.scroll = new BScroll(
+            let vm = this
+            vm.scroll = new BScroll(
                 this.$refs.wrapper,
                 {
                     click: true,
                     probeType: 3
                 }
             )
-            this.itemH = this.$refs.labelEl[0].clientHeight
-            this.alphabetH = this.$refs.keyEl[0].clientHeight
 
-            let num = 1
-            for (let i = 0; i < this.options.length - 1; i++) {
-                const currEle = this.options[i]
-                const nextEle = this.options[i+1]
-                
-                if (currEle.key !== nextEle.key) {
-                    this.groupHeights.push( (i+1)*this.itemH + num*this.alphabetH)
-                    num++
-                } 
+            /**
+             * 
+             */
+            const list = vm.$refs.listGroup
+            if (!list) return
+            let h = 0
+            for (let i = 0; i < list.length; i++) {
+                h += list[i].clientHeight
+                vm.groupHeights.push(h)
             }
-  
-            this.scroll.on('scroll', (pos) => {
+
+            vm.scroll.on('scroll', (pos) => {
                 const y = pos.y
+                
+                //y大于0
                 if (y > 0) {
-                    this.activeKeyIndex = 0
+                    vm.activeKeyIndex = 0
                     return
                 }
+                
+                for (let i = 0; i < vm.groupHeights.length; i++) {
+                    let h1 = vm.groupHeights[i]
+                    let h2 = vm.groupHeights[i + 1]
 
-                for (let i = 0; i < this.groupHeights.length - 1; i++) {
-                    let h1 = this.groupHeights[i]
-                    let h2 = this.groupHeights[i+1]
-                    
                     if (-y >= h1 && -y < h2) {                        
-                        this.activeKeyIndex = i+1
+                        vm.activeKeyIndex = i+1
                         return
                     }
                 }
 
-               
-                
             })
+            
         })
         
     }
@@ -258,23 +213,19 @@ export default {
         height: 100%;
         overflow: hidden;
     }
-    ul{
-        li{
+    ul.groups{
+        h2{
+            padding: 0 20px;
+            line-height: 48px;
+            background-color: #EEE;
+        }
+    }
+    ul.list{
+        li.list-item{
+            padding: 0 20px;
             border-bottom:#EEE solid 1px;
-            &:last-child{
-                border-bottom: none;
-            }
-            .key{
-                background-color: #F8F8F8;
-                line-height: 48px;
-                padding: 0 20px;
-                font-size: 26px;
-            }
-            .label{
-                padding: 0 20px;
-                line-height: 96px;
-                font-size: 30px;
-            }
+            line-height: 96px;
+            font-size: 30px;
         }
     }
     .alphabets{

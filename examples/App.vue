@@ -1,7 +1,8 @@
 <template>
     <div class="demo">
         <alphabet-sort-list
-            :list="dataList">
+            :list="data"
+            @itemClick="itemClickHandle">
         </alphabet-sort-list>
     </div>
 </template>
@@ -10,221 +11,150 @@
 export default {
     data () {
         return {
-            dataList: [
+            data:[
                 {
-                    value: 10001,
-                    label: '成都'
+                    name: 'B',
+                    list: [
+                        {
+                            label: '北京',
+                            value: 10000
+                        },
+                        {
+                            label: '北海',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10002,
-                    label: '北京'
+                    name: 'C',
+                    list: [
+                        {
+                            label: '成都',
+                            value: 10000
+                        },
+                        {
+                            label: '重庆',
+                            value: 10000
+                        },
+                        {
+                            label: '长春',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '上海'
+                    name: 'F',
+                    list: [
+                        {
+                            label: '福州',
+                            value: 10000
+                        },
+                        {
+                            label: '佛山',
+                            value: 10000
+                        },
+                        {
+                            label: '防城港',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '广州'
+                    name: 'G',
+                    list: [
+                        {
+                            label: '广州',
+                            value: 10000
+                        },
+                        {
+                            label: '广安',
+                            value: 10000
+                        },
+                        {
+                            label: '贵阳',
+                            value: 10000
+                        },
+                        {
+                            label: '桂林',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '杭州'
+                    name: 'H',
+                    list: [
+                        {
+                            label: '杭州',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '南京'
+                    name: 'K',
+                    list: [
+                        {
+                            label: '昆明',
+                            value: 10000
+                        },
+                        {
+                            label: '开封',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '福州'
+                    name: 'M',
+                    list: [
+                        {
+                            label: '绵阳',
+                            value: 10000
+                        },
+                        {
+                            label: '开封',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '天津'
+                    name: 'N',
+                    list: [
+                        {
+                            label: '南京',
+                            value: 10000
+                        },
+                        {
+                            label: '南充',
+                            value: 10000
+                        },
+                        {
+                            label: '南平',
+                            value: 10000
+                        },
+                        {
+                            label: '南宁',
+                            value: 10000
+                        }
+                    ]
                 },
                 {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '郑州'
-                },
-                {
-                    value: 10003,
-                    label: '苏州'
-                },
-                {
-                    value: 10003,
-                    label: '无锡'
-                },
-                {
-                    value: 10003,
-                    label: '苏州'
-                },
-                {
-                    value: 10003,
-                    label: '昆明'
-                },
-                {
-                    value: 10003,
-                    label: '贵阳'
-                },
-                {
-                    value: 10003,
-                    label: '沈阳'
-                },
-                {
-                    value: 10003,
-                    label: '南阳'
-                },
-                {
-                    value: 10003,
-                    label: '南充'
-                },
-                {
-                    value: 10003,
-                    label: '绵阳'
-                },
-                {
-                    value: 10003,
-                    label: '广安'
-                },
-                {
-                    value: 10003,
-                    label: '桂林'
-                },
-                {
-                    value: 10003,
-                    label: '南宁'
-                },
-                {
-                    value: 10003,
-                    label: '北海'
-                },
-                {
-                    value: 10003,
-                    label: '开封'
-                },
-                {
-                    value: 10003,
-                    label: '沈阳'
-                },
-                {
-                    value: 10003,
-                    label: '长春'
-                },
-                {
-                    value: 10003,
-                    label: '深圳'
+                    name: 'Z',
+                    list: [
+                        {
+                            label: '郑州',
+                            value: 10000
+                        },
+                        {
+                            label: '漳州',
+                            value: 10000
+                        }
+                    ]
                 }
-
             ]
+        }
+    },
+    methods: {
+        itemClickHandle (obj) {
+            console.log(obj);
         }
     }
 }
