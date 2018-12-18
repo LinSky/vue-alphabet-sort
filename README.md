@@ -10,6 +10,11 @@ npm install --save vue-alphabet-sort
 
 import alphabetSortList from 'vue-alphabet-sort'
 Vue.use(alphabetSortList)
+
+<alphabet-sort-list
+    :list="data"
+    @itemClick="itemClickHandle">
+</alphabet-sort-list>
 ```
 
 ## Demo
