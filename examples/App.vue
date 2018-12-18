@@ -154,7 +154,7 @@ export default {
     },
     methods: {
         itemClickHandle (obj) {
-            console.log(obj);
+            alert(JSON.stringify(obj));
         }
     }
 }

@@ -1,7 +1,10 @@
 {
   "name": "vue-alphabet-sort",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
+  "main": "lib/alphabet-sort-list.umd.js",
+  "license": "MIT",
+  "author": "sanmu",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -11,7 +14,6 @@
   "dependencies": {
     "better-scroll": "^1.13.2",
     "lib-flexible": "^0.3.2",
-    "pinyin": "^2.8.3",
     "vue": "^2.5.17"
   },
   "devDependencies": {
@@ -26,6 +28,18 @@
     "postcss-plugin-px2rem": "^0.8.0",
     "vue-template-compiler": "^2.5.17"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinSky/vue-alphabet-sort.git"
+  },
+  "keywords": [
+    "vue",
+    "select",
+    "sort",
+    "alphabet",
+    "pinyin",
+    "first alphabet"
+  ],
   "eslintConfig": {
     "root": true,
     "env": {

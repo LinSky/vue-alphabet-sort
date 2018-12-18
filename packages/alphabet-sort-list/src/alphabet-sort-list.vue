@@ -18,9 +18,9 @@
             @touchstart.stop="touchstartHandle"
             @touchmove.stop="touchmoveHandle"
             @touchend.stop="touchendHandle">
-            <div class="item" v-for="(item, index) in alphabets" :class="{active: index == activeKeyIndex}">{{item}}</div>
+            <div class="item" v-for="(item, index) in alphabets" :style="index === activeKeyIndex && keyTextColor">{{item}}</div>
         </div>
-        <div class="active-key" v-if="showActiveKey">{{activeKey}}</div>
+        <div class="active-key" v-if="showActiveKey" :style="keyBgColorStyle">{{activeKey}}</div>
     </div>
 </template>
 
@@ -42,6 +42,10 @@ export default {
         valueKey: {
             type: String,
             default: 'value'
+        },
+        activeColor: {
+            type: String,
+            default: '#DD3629'
         }
     },
     data () {
@@ -73,9 +77,22 @@ export default {
                 return item.name.substr(0, 1)
             })
         },
+        //当前字母
         activeKey: function () {
             return this.alphabets[this.activeKeyIndex]
+        },
+        //提示字母背景颜色
+        keyBgColorStyle: function () {
+            return {
+                'background-color': this.activeColor
+            }
+        },
+        keyTextColor: function () {
+            return {
+                'color': this.activeColor
+            }
         }
+        
 
     },
     methods: {
@@ -253,11 +270,9 @@ export default {
         top: 50%;
         transform: translate(-50%, -50%);
         width: 96px;
-        box-shadow: 0 0 15px rgba(10, 224, 207, 1);
         border-radius: 50%;
         line-height: 96px;
         text-align: center;
-        background-color: rgb(31, 172, 165);
         font-size: 36px;
         color: #FFF;
     }
